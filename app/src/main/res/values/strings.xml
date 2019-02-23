@@ -1,0 +1,15 @@
+<resources>
+
+    <string name="app_name">Whosontop</string>
+    <string name="whoisontop">Who is on Top?</string>
+    <string name="add_data">+ Add More Data</string>
+
+    <!--recyclerview string-->
+    <string name="item_content">Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem lorem ipsum ipsum</string>
+    <string name="item_id">id</string>
+    <string name="item_category">category</string>
+    <string name="we_are_top">We are on top</string>
+
+    <string name="error">Something error happened!</string>
+    <string name="check_internet">Check your internet connection, dude....</string>
+</resources>
