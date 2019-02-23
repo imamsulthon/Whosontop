@@ -12,4 +12,10 @@
 
     <string name="error">Something error happened!</string>
     <string name="check_internet">Check your internet connection, dude....</string>
+    <string name="uncategorized">uncatagorized</string>
+    <string name="its_funny">It\'s Funny?</string>
+    <string name="cringe">Ewww</string>
+    <string name="its_funny_response">Wow. You think it\'s funny ha?</string>
+    <string name="cringe_response">Eewwww....</string>
+
 </resources>

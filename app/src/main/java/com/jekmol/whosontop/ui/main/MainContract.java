@@ -8,15 +8,19 @@ public interface MainContract {
 
     interface View {
 
-        void showLoading();
+        void showProgressLoading();
 
-        void hideLoading();
+        void hideProgressLoading();
+
+        void showRefreshLoading();
+
+        void hideRefreshLoading();
 
         void showResults(ArrayList<Item> items);
 
         void showError();
 
-        void hideAddDataButton(boolean hide);
+        void hideAddMoreData(boolean hide);
 
     }
 

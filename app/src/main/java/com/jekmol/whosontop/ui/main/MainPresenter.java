@@ -25,11 +25,12 @@ public class MainPresenter implements Presenter {
 
     @Override
     public void initData() {
-        view.showLoading();
+        view.showProgressLoading();
         Call<ItemResponse> call = apiService.getData();
         call.enqueue(new Callback<ItemResponse>() {
             @Override
             public void onResponse(Call<ItemResponse> call, Response<ItemResponse> response) {
+                view.hideProgressLoading();
                 ItemResponse itemResponse = response.body();
                 if (itemResponse != null) {
                     ArrayList<Item> arrayList = itemResponse.getResults();
@@ -45,19 +46,20 @@ public class MainPresenter implements Presenter {
 
             @Override
             public void onFailure(Call<ItemResponse> call, Throwable t) {
+                view.hideProgressLoading();
                 view.showError();
             }
         });
-        view.hideLoading();
     }
 
     @Override
     public void refreshData() {
-        view.showLoading();
+        view.showRefreshLoading();
         Call<ItemResponse> call = apiService.getData();
         call.enqueue(new Callback<ItemResponse>() {
             @Override
             public void onResponse(Call<ItemResponse> call, Response<ItemResponse> response) {
+                view.hideRefreshLoading();
                 ItemResponse itemResponse = response.body();
                 if (itemResponse != null) {
                     ArrayList<Item> arrayList = itemResponse.getResults();
@@ -66,7 +68,7 @@ public class MainPresenter implements Presenter {
                         itemList.add(arrayList.get(i));
                     }
                     view.showResults(itemList);
-                    view.hideAddDataButton(false);
+                    view.hideAddMoreData(false);
                 } else {
                     view.showError();
                 }
@@ -74,10 +76,11 @@ public class MainPresenter implements Presenter {
 
             @Override
             public void onFailure(Call<ItemResponse> call, Throwable t) {
+                view.hideRefreshLoading();
                 view.showError();
             }
         });
-        view.hideLoading();
+
     }
 
     @Override
@@ -92,9 +95,9 @@ public class MainPresenter implements Presenter {
                     itemList.add(arrayList.get(0));
                     view.showResults(itemList);
                     if (itemList.size() >= 5) {
-                        view.hideAddDataButton(true);
+                        view.hideAddMoreData(true);
                     } else {
-                        view.hideAddDataButton(false);
+                        view.hideAddMoreData(false);
                     }
                 } else {
                     view.showError();

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jekmol.whosontop.R;
 import com.jekmol.whosontop.model.Item;
@@ -43,7 +44,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
         holder.tvId.setText(String.valueOf(item.getId()));
         holder.tvContent.setText(item.getJoke().replaceAll("&quote;", "'"));
         if (item.getCategory() == null || item.getCategory().length == 0) {
-            holder.tvCategories.setText("uncategorized");
+            holder.tvCategories.setText(R.string.uncategorized);
         } else {
             holder.tvCategories.setText(item.getCategory()[0]);
         }
@@ -59,10 +60,12 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle("Item " + item.getId());
                 builder.setMessage(item.getJoke());
-                builder.setPositiveButton("It's Funny", (dialog, which) -> {
+                builder.setPositiveButton(R.string.its_funny, (dialog, which) -> {
+                    Toast.makeText(context, R.string.its_funny_response, Toast.LENGTH_LONG).show();
                     dialog.dismiss();
                 });
-                builder.setNegativeButton("Ewww", (dialog, which) -> {
+                builder.setNegativeButton(R.string.cringe, (dialog, which) -> {
+                    Toast.makeText(context, R.string.cringe_response, Toast.LENGTH_LONG).show();
                     dialog.dismiss();
                 });
                 Dialog dialog = builder.create();
@@ -74,6 +77,13 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return arrayList.size();
+    }
+
+    interface OnItemClick {
+        void onItemClick(int position, Item item);
+    }
+
+    interface onButtonClick {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -99,14 +109,6 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
                 ivMoveUp.setVisibility(View.VISIBLE);
             }
         }
-
-    }
-
-    interface OnItemClick {
-        void onItemClick(int position, Item item);
-    }
-
-    interface onButtonClick {
 
     }
 

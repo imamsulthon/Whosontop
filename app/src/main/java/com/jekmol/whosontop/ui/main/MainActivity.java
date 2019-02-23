@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @BindView(R.id.layout_content) RelativeLayout layoutContent;
     @BindView(R.id.layout_error) RelativeLayout layoutError;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
-    @BindView(R.id.add_data) TextView addMoreData;
+    @BindView(R.id.add_more_data) TextView addMoreData;
     @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
     MainPresenter presenter;
@@ -40,37 +40,35 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         presenter = new MainPresenter(this);
         presenter.initData();
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                presenter.refreshData();
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> presenter.refreshData());
 
-        addMoreData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.addData();
-            }
-        });
+        addMoreData.setOnClickListener(v -> presenter.addData());
     }
 
     @Override
-    public void showLoading() {
+    public void showProgressLoading() {
         progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressLoading() {
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showRefreshLoading() {
         swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
-    public void hideLoading() {
-        progressBar.setVisibility(View.GONE);
+    public void hideRefreshLoading() {
         swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void showResults(ArrayList<Item> items) {
         layoutContent.setVisibility(View.VISIBLE);
-        layoutError.setVisibility(View.GONE);
+        layoutError.setVisibility(View.INVISIBLE);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -86,12 +84,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void hideAddDataButton(boolean hide) {
+    public void hideAddMoreData(boolean hide) {
         if (hide) {
             addMoreData.setVisibility(View.INVISIBLE);
         } else {
             addMoreData.setVisibility(View.VISIBLE);
         }
-
     }
+
 }

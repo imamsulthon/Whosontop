@@ -1,6 +1,5 @@
 package com.jekmol.whosontop.ui.splash;
 
-
 import android.os.Handler;
 
 public class SplashScreenPresenter implements SplashScreenContract.Presenter {
