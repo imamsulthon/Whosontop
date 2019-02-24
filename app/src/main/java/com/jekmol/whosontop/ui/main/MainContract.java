@@ -22,8 +22,6 @@ public interface MainContract {
 
         void showMessage(String message);
 
-        void hideAddMoreData(boolean hide);
-
     }
 
     interface Presenter {

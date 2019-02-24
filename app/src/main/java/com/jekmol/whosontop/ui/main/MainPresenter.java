@@ -86,7 +86,6 @@ public class MainPresenter implements Presenter {
                     database.close();
                     view.showResults(itemList);
                     view.showMessage("Succesfully refreshing data");
-                    view.hideAddMoreData(false);
                 } else {
                     view.showMessage("Null result");
                 }
@@ -108,12 +107,9 @@ public class MainPresenter implements Presenter {
             ArrayList<Item> arrayList = new ArrayList<>();
             arrayList.addAll(database.getAllItems());
             if (arrayList.size() != 0) {
-                if (itemList.size() <= 5) {
+                if (itemList.size() <= 8) {
                     itemList.add(arrayList.get(0));
                     database.deleteItem(arrayList.get(0));
-                }
-                if (itemList.size() >= 5) {
-                    view.hideAddMoreData(true);
                 }
                 view.showResults(itemList);
                 view.showMessage("Succesfully added data");

@@ -8,25 +8,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jekmol.whosontop.R;
+import com.jekmol.whosontop.adapter.ItemAdapter;
 import com.jekmol.whosontop.model.entity.Item;
-import com.jekmol.whosontop.adapater.JokeAdapter;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements MainContract.View {
+public class MainActivity extends AppCompatActivity implements MainContract.View, ItemAdapter.FooterClickListener {
 
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
     @BindView(R.id.layout_content) RelativeLayout layoutContent;
     @BindView(R.id.layout_error) RelativeLayout layoutError;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
-    @BindView(R.id.add_more_data) TextView addMoreData;
     @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
 
     MainPresenter presenter;
@@ -41,8 +39,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         presenter.initData();
 
         swipeRefreshLayout.setOnRefreshListener(() -> presenter.refreshData());
-
-        addMoreData.setOnClickListener(v -> presenter.addData());
     }
 
     @Override
@@ -73,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(false);
-        JokeAdapter adapter = new JokeAdapter(this, items);
+        ItemAdapter adapter = new ItemAdapter(this, items, this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -90,12 +86,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void hideAddMoreData(boolean hide) {
-        if (hide) {
-            addMoreData.setVisibility(View.INVISIBLE);
-        } else {
-            addMoreData.setVisibility(View.VISIBLE);
-        }
+    public void onFooterClick() {
+        presenter.addData();
     }
 
     @Override
@@ -103,4 +95,5 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         super.onDestroy();
         presenter.deleteDabase();
     }
+
 }
