@@ -1,6 +1,7 @@
-package com.jekmol.whosontop.model;
+package com.jekmol.whosontop.model.response;
 
 import com.google.gson.annotations.SerializedName;
+import com.jekmol.whosontop.model.entity.Item;
 
 import java.util.ArrayList;
 

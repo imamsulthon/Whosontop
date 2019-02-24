@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jekmol.whosontop.R;
-import com.jekmol.whosontop.model.Item;
+import com.jekmol.whosontop.model.entity.Item;
 import com.jekmol.whosontop.adapater.JokeAdapter;
 
 import java.util.ArrayList;
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),
                 LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(false);
         JokeAdapter adapter = new JokeAdapter(this, items);
         recyclerView.setAdapter(adapter);
     }
@@ -84,6 +85,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void hideAddMoreData(boolean hide) {
         if (hide) {
             addMoreData.setVisibility(View.INVISIBLE);
@@ -92,4 +98,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.deleteDabase();
+    }
 }

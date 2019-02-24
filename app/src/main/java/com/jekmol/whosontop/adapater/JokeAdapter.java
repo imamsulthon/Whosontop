@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jekmol.whosontop.R;
-import com.jekmol.whosontop.model.Item;
+import com.jekmol.whosontop.model.entity.Item;
 
 import java.util.ArrayList;
 
@@ -43,10 +43,10 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
         final Item item = arrayList.get(position);
         holder.tvId.setText(String.valueOf(item.getId()));
         holder.tvContent.setText(item.getJoke().replaceAll("&quote;", "'"));
-        if (item.getCategory() == null || item.getCategory().length == 0) {
+        if (item.getCategory() == null || item.getCategory().size() == 0) {
             holder.tvCategories.setText(R.string.uncategorized);
         } else {
-            holder.tvCategories.setText(item.getCategory()[0]);
+            holder.tvCategories.setText(item.getCategory().first());
         }
         holder.weAreOnTop(position);
         holder.ivMoveUp.setOnClickListener(v -> {
@@ -77,13 +77,6 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return arrayList.size();
-    }
-
-    interface OnItemClick {
-        void onItemClick(int position, Item item);
-    }
-
-    interface onButtonClick {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

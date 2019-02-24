@@ -1,6 +1,6 @@
 package com.jekmol.whosontop.ui.main;
 
-import com.jekmol.whosontop.model.Item;
+import com.jekmol.whosontop.model.entity.Item;
 
 import java.util.ArrayList;
 
@@ -20,6 +20,8 @@ public interface MainContract {
 
         void showError();
 
+        void showMessage(String message);
+
         void hideAddMoreData(boolean hide);
 
     }
@@ -31,6 +33,8 @@ public interface MainContract {
         void refreshData();
 
         void addData();
+
+        void deleteDabase();
 
     }
 

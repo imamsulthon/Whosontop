@@ -1,4 +1,4 @@
-package com.jekmol.whosontop.data;
+package com.jekmol.whosontop.service;
 
 import com.jekmol.whosontop.BuildConfig;
 

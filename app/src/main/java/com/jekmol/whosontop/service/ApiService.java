@@ -1,6 +1,6 @@
-package com.jekmol.whosontop.data;
+package com.jekmol.whosontop.service;
 
-import com.jekmol.whosontop.model.ItemResponse;
+import com.jekmol.whosontop.model.response.ItemResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

@@ -1,9 +1,10 @@
 package com.jekmol.whosontop.ui.main;
 
-import com.jekmol.whosontop.data.ApiClient;
-import com.jekmol.whosontop.data.ApiService;
-import com.jekmol.whosontop.model.Item;
-import com.jekmol.whosontop.model.ItemResponse;
+import com.jekmol.whosontop.model.data.DatabaseHelper;
+import com.jekmol.whosontop.service.ApiClient;
+import com.jekmol.whosontop.service.ApiService;
+import com.jekmol.whosontop.model.entity.Item;
+import com.jekmol.whosontop.model.response.ItemResponse;
 import com.jekmol.whosontop.ui.main.MainContract.Presenter;
 
 import java.util.ArrayList;
@@ -17,10 +18,12 @@ public class MainPresenter implements Presenter {
     private MainContract.View view;
     private ArrayList<Item> itemList = new ArrayList<>();
     private ApiService apiService;
+    private DatabaseHelper database;
 
     public MainPresenter(MainContract.View view) {
         this.view = view;
         this.apiService = ApiClient.makeService();
+        this.database = new DatabaseHelper();
     }
 
     @Override
@@ -35,12 +38,19 @@ public class MainPresenter implements Presenter {
                 if (itemResponse != null) {
                     ArrayList<Item> arrayList = itemResponse.getResults();
                     itemList.clear();
-                    for (int i = 0; i <= 2; i++) {
-                        itemList.add(arrayList.get(i));
+                    for (int i = 0; i < arrayList.size(); i++) {
+                        if (i <= 2) {
+                            itemList.add(arrayList.get(i));
+                        } else {
+                            database.open();
+                            database.addItem(arrayList.get(i));
+                            database.close();
+                        }
                     }
                     view.showResults(itemList);
+                    view.showMessage("Succesfully init data");
                 } else {
-                    view.showError();
+                    view.showMessage("Null result");
                 }
             }
 
@@ -64,13 +74,21 @@ public class MainPresenter implements Presenter {
                 if (itemResponse != null) {
                     ArrayList<Item> arrayList = itemResponse.getResults();
                     itemList.clear();
-                    for (int i = 0; i <= 2; i++) {
-                        itemList.add(arrayList.get(i));
+                    database.open();
+                    database.deleteAllItem();
+                    for (int i = 0; i < arrayList.size(); i++) {
+                        if (i <= 2) {
+                            itemList.add(arrayList.get(i));
+                        } else {
+                            database.addItem(arrayList.get(i));
+                        }
                     }
+                    database.close();
                     view.showResults(itemList);
+                    view.showMessage("Succesfully refreshing data");
                     view.hideAddMoreData(false);
                 } else {
-                    view.showError();
+                    view.showMessage("Null result");
                 }
             }
 
@@ -85,30 +103,39 @@ public class MainPresenter implements Presenter {
 
     @Override
     public void addData() {
-        Call<ItemResponse> call = apiService.getData();
-        call.enqueue(new Callback<ItemResponse>() {
-            @Override
-            public void onResponse(Call<ItemResponse> call, Response<ItemResponse> response) {
-                ItemResponse itemResponse = response.body();
-                if (itemResponse != null) {
-                    ArrayList<Item> arrayList = itemResponse.getResults();
+        try {
+            database.open();
+            ArrayList<Item> arrayList = new ArrayList<>();
+            arrayList.addAll(database.getAllItems());
+            if (arrayList.size() != 0) {
+                if (itemList.size() <= 5) {
                     itemList.add(arrayList.get(0));
-                    view.showResults(itemList);
-                    if (itemList.size() >= 5) {
-                        view.hideAddMoreData(true);
-                    } else {
-                        view.hideAddMoreData(false);
-                    }
-                } else {
-                    view.showError();
+                    database.deleteItem(arrayList.get(0));
                 }
+                if (itemList.size() >= 5) {
+                    view.hideAddMoreData(true);
+                }
+                view.showResults(itemList);
+                view.showMessage("Succesfully added data");
+            } else {
+                view.showMessage("No more data");
             }
+            database.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            view.showError();
+        }
+    }
 
-            @Override
-            public void onFailure(Call<ItemResponse> call, Throwable t) {
-                view.showError();
-            }
-        });
+    @Override
+    public void deleteDabase() {
+        try {
+            database.open();
+            database.deleteAllItem();
+            database.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
